@@ -1,5 +1,7 @@
 # Housing Market Analysis
 
+**Live demo:** https://daniel-tietie-housing-market-analysis.streamlit.app/
+
 An end-to-end data analytics and machine learning project built on the Ames Housing dataset: data ingestion, SQL storage and querying, exploratory analysis, predictive modeling, and an interactive dashboard. Built to demonstrate a complete pipeline end to end, from raw data to a working dashboard, for a data engineering and analytics portfolio.
 
 ## Data source and methodology
@@ -14,7 +16,7 @@ An end-to-end data analytics and machine learning project built on the Ames Hous
 
 ## Key findings
 
-- Neighborhood is the largest price determinant: average prices range from $105k (MeadowV) to $335k (NridgHt), a 3x spread within the same city.
+- Neighborhood is the largest price determinant: average prices range from $99k (MeadowV) to $335k (NoRidge), a 3.4x spread within the same city.
 - Overall quality rating (1-10) has the strongest single-feature correlation with price (r = 0.80). Each quality step above 6 adds roughly $40-50k to the average sale price, accelerating sharply at 9-10.
 - Sale volume dropped significantly in 2010 following the 2008 financial crisis, but average prices in Ames held relatively stable (less than 5% decline), suggesting the local market was insulated from the national correction.
 - The spring buying season is pronounced: May and June account for over 30% of annual transactions, but average prices don't meaningfully differ by month; timing affects volume, not price.
