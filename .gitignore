@@ -30,8 +30,5 @@ data/processed/*.parquet
 .DS_Store
 Thumbs.db
 
-# Power BI temp files
-*.pbix.bak
-
 # Local planning notes (not part of the deliverable)
 housing_project_plan.md

@@ -22,7 +22,7 @@ An end-to-end data analytics and machine learning project built on the Ames Hous
 
 ## Dashboard
 
-The working dashboard is built with Streamlit and Plotly (`streamlit_app/app.py`), reading live from `data/housing.db`. A Power BI version was originally planned and is in progress (`dashboard/housing_dashboard.pbix`); the Streamlit app is the complete, functioning dashboard for now.
+The dashboard is built with Streamlit and Plotly (`streamlit_app/app.py`), reading live from `data/housing.db`.
 
 Four pages:
 
@@ -43,7 +43,6 @@ Four pages:
 - Python 3.11, pandas, numpy, scikit-learn, matplotlib, seaborn, plotly
 - SQLite (via Python's built-in `sqlite3`)
 - Streamlit (interactive dashboard)
-- Power BI Desktop (in-progress dashboard)
 
 ## Repository structure
 
@@ -66,7 +65,6 @@ housing-market-analysis/
     features.py       feature matrix preparation for ML
     model.py          model training and evaluation
   dashboard/
-    housing_dashboard.pbix
     screenshots/
   streamlit_app/
     app.py
