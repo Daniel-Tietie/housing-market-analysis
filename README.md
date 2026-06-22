@@ -1,10 +1,13 @@
 # Housing Market Analysis
 
+------------------------------------------------------------------
 ### Live demo
 
 [https://daniel-tietie-housing-market-analysis.streamlit.app/](https://daniel-tietie-housing-market-analysis.streamlit.app/)
 
-**Note:** the dashboard is styled for light mode. If your browser/Streamlit theme defaults to dark mode, switch to light mode (Settings menu, top-right ⋮ in the app) for properly readable charts and metric cards.
+**Note:** the dashboard is styled for light mode.So it's a bit wonky in darkmode.  If your browser/Streamlit theme defaults to dark mode, switch to light mode (Settings menu, top-right ⋮ in the app) for best viewing experience.
+
+-------------------------------------------------------------------
 
 An end-to-end data analytics and machine learning project built on the Ames Housing dataset: data ingestion, SQL storage and querying, exploratory analysis, predictive modeling, and an interactive dashboard. Built to demonstrate a complete pipeline end to end, from raw data to a working dashboard, for a data engineering and analytics portfolio.
 
