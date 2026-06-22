@@ -539,7 +539,8 @@ elif page == "Risk & Volatility":
             size_max=35,
         )
         fig2.update_traces(textposition="top center", textfont_size=8)
-        fig2.update_layout(coloraxis_colorbar=dict(title="CV", thickness=12), height=600, **PLOTLY_LAYOUT)
+        fig2.update_layout(height=600, **PLOTLY_LAYOUT)
+        fig2.update_layout(coloraxis_colorbar=dict(title="CV", thickness=12))
         st.plotly_chart(fig2, use_container_width=True)
 
     st.divider()
@@ -584,5 +585,5 @@ elif page == "Risk & Volatility":
         "avg_price": "Avg price", "std_price": "Std dev",
         "min_price": "Min", "max_price": "Max",
         "price_range": "Range", "cv": "CV", "avg_ppsf": "$/sq ft",
-    }).drop(columns=["avg_ppsf"])
+    })
     st.dataframe(tbl, use_container_width=True, hide_index=True)

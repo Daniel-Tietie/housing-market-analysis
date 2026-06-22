@@ -17,9 +17,10 @@ data/raw/*.parquet
 data/processed/*.csv
 data/processed/*.parquet
 
-# Database
-*.db
+# Database (housing.db is committed intentionally for Streamlit Cloud deployment)
 *.sqlite
+*.db
+!data/housing.db
 
 # IDE
 .vscode/
@@ -31,3 +32,6 @@ Thumbs.db
 
 # Power BI temp files
 *.pbix.bak
+
+# Local planning notes (not part of the deliverable)
+housing_project_plan.md

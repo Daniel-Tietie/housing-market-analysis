@@ -1,42 +1,49 @@
 # Housing Market Analysis
 
-An end-to-end data analytics and machine learning project built on the Ames Housing dataset. The pipeline covers data ingestion, SQL-based storage and querying, exploratory analysis, predictive modeling, and an interactive dashboard.
+An end-to-end data analytics and machine learning project built on the Ames Housing dataset: data ingestion, SQL storage and querying, exploratory analysis, predictive modeling, and an interactive dashboard. Built to demonstrate a complete pipeline end to end, from raw data to a working dashboard, for a data engineering and analytics portfolio.
 
 ## Data source and methodology
 
 **Dataset:** Ames Housing, compiled by Dean De Cock (2011). 2,919 residential property sales in Ames, Iowa from 2006 to 2010, with 79 explanatory features covering lot characteristics, construction quality, interior area, and sale conditions.
 
-**Source:** OpenML dataset ID 42165, fetched programmatically via scikit-learn's `fetch_openml`. No manual download required — run `python src/ingest.py` to reproduce from scratch.
+**Source:** OpenML dataset ID 42165, fetched programmatically via scikit-learn's `fetch_openml`. No manual download required; run `python src/ingest.py` to reproduce from scratch.
 
-**Why Ames, not a Canadian dataset:** CREA and CMHC publish aggregate price indices, not individual property records. Without individual-level data, meaningful ML modeling (feature importance, train/test evaluation) is not possible. Ames is an established academic benchmark dataset suitable for demonstrating the full analytics pipeline.
+**Why Ames, not a Canadian dataset:** CREA and CMHC publish aggregate price indices, not individual property records. Without individual-level data, meaningful ML modeling (feature importance, train/test evaluation) isn't possible. Ames is an established academic benchmark dataset suitable for demonstrating the full analytics pipeline.
 
 **Storage:** SQLite local database (`data/housing.db`) with two tables: `raw_housing` (original data, unmodified) and `clean_housing` (analysis-ready, produced by `src/clean.py`).
 
 ## Key findings
 
-- Neighborhood is the largest price determinant: average prices range from $105k (MeadowV) to $335k (NridgHt) — a 3x spread within the same city.
-- Overall quality rating (1–10) has the strongest single-feature correlation with price (r = 0.80). Each quality step above 6 adds roughly $40–50k to the average sale price, accelerating sharply at 9–10.
+- Neighborhood is the largest price determinant: average prices range from $105k (MeadowV) to $335k (NridgHt), a 3x spread within the same city.
+- Overall quality rating (1-10) has the strongest single-feature correlation with price (r = 0.80). Each quality step above 6 adds roughly $40-50k to the average sale price, accelerating sharply at 9-10.
 - Sale volume dropped significantly in 2010 following the 2008 financial crisis, but average prices in Ames held relatively stable (less than 5% decline), suggesting the local market was insulated from the national correction.
-- The spring buying season is pronounced: May and June account for over 30% of annual transactions, but average prices do not meaningfully differ by month — timing affects volume, not price.
-- Gradient Boosting outperformed linear regression with a test RMSE of approximately $25,000 and R² of 0.89 vs. the baseline's RMSE of ~$40,000 and R² of 0.77. The model is reliable for homes in the $100k–$350k range; predictions above $400k are systematically low due to limited training examples.
+- The spring buying season is pronounced: May and June account for over 30% of annual transactions, but average prices don't meaningfully differ by month; timing affects volume, not price.
+- Gradient Boosting outperformed linear regression with a test RMSE of approximately $25,000 and R² of 0.89, versus the baseline's RMSE of ~$40,000 and R² of 0.77. The model is reliable for homes in the $100k-$350k range; predictions above $400k are systematically low due to limited training examples.
 
 ## Dashboard
 
-The Power BI dashboard (`dashboard/housing_dashboard.pbix`) provides four views:
+The working dashboard is built with Streamlit and Plotly (`streamlit_app/app.py`), reading live from `data/housing.db`. A Power BI version was originally planned and is in progress (`dashboard/housing_dashboard.pbix`); the Streamlit app is the complete, functioning dashboard for now.
 
-1. **Overview** — total listings, average and median price, price range by year
-2. **Geographic** — average price by neighborhood (bar chart ranked by price)
-3. **Trends** — sale price and volume over time, seasonal patterns by month
-4. **Risk/Volatility** — price standard deviation and coefficient of variation by neighborhood
+Four pages:
 
-Screenshots are in `dashboard/screenshots/`.
+1. **Overview** — total listings, average and median price, price distribution, price by quality, price/volume by year, building type mix
+2. **Geographic** — average price by neighborhood, price range by neighborhood, quality vs. price scatter, full neighborhood summary table
+3. **Trends** — price and volume by year, seasonal patterns by month, price per sq ft by year, price by decade built
+4. **Risk & Volatility** — price volatility (coefficient of variation) by neighborhood, std dev vs. average price, min/max price range, full risk table
+
+### Screenshots
+
+![Overview](dashboard/screenshots/overview.png)
+![Geographic](dashboard/screenshots/geographic.png)
+![Trends](dashboard/screenshots/trends.png)
+![Risk and Volatility](dashboard/screenshots/risk_volatility.png)
 
 ## Tech stack
 
 - Python 3.11, pandas, numpy, scikit-learn, matplotlib, seaborn, plotly
 - SQLite (via Python's built-in `sqlite3`)
-- Power BI Desktop (dashboard)
-- Streamlit (optional live app)
+- Streamlit (interactive dashboard)
+- Power BI Desktop (in-progress dashboard)
 
 ## Repository structure
 
@@ -45,6 +52,7 @@ housing-market-analysis/
   data/
     raw/              original CSV (reproduced by ingest.py)
     processed/        cleaned CSV (reproduced by clean.py)
+    housing.db        SQLite database (committed for dashboard deployment)
   sql/
     schema.sql        table definitions
     queries.sql       analytical SQL queries used in the EDA notebook
@@ -79,8 +87,8 @@ venv\Scripts\activate
 source venv/bin/activate
 
 pip install -r requirements.txt
-
-# Fetch data and build the database
+# data/housing.db is already included in the repo, so the steps below are
+# optional and only needed to reproduce the database from scratch.
 python src/ingest.py
 python src/clean.py
 
@@ -91,4 +99,4 @@ jupyter notebook notebooks/
 streamlit run streamlit_app/app.py
 ```
 
-The `data/housing.db` SQLite file is created automatically by `ingest.py`. All data can be reproduced from scratch; no manual downloads are required.
+`data/housing.db` is committed to the repo so the dashboard works immediately after cloning. The `ingest.py` and `clean.py` steps above can regenerate it from scratch if needed.
