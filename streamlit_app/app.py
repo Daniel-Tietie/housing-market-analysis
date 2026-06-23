@@ -47,6 +47,9 @@ st.markdown(f"""
 <style>
     html, body, [class*="css"] {{ font-family: {FONT}; }}
     .block-container {{ padding-top: 1.5rem; padding-bottom: 1rem; }}
+    /* Let vertical scroll gestures pass through chart elements on touch
+       devices instead of being captured as a chart zoom/pan/select. */
+    .js-plotly-plot, .plotly, .main-svg {{ touch-action: pan-y !important; }}
     .metric-card {{
         background: white;
         border: 1px solid #e2e8f0;
@@ -144,6 +147,17 @@ def clean_fig(fig):
     return fig
 
 
+def show_chart(fig):
+    """Render a Plotly figure with touch-drag interactions disabled, so
+    accidental finger contact while scrolling on mobile doesn't trigger
+    zoom/pan/select on the chart."""
+    fig.update_layout(dragmode=False)
+    st.plotly_chart(
+        fig, use_container_width=True,
+        config={"scrollZoom": False, "displayModeBar": False, "doubleClick": False},
+    )
+
+
 # ══════════════════════════════════════════════════════════════════════════════
 # PAGE 1 — OVERVIEW
 # ══════════════════════════════════════════════════════════════════════════════
@@ -191,7 +205,7 @@ if page == "Overview":
                       annotation_text=f"Mean {fmt_price(avg_price)}", annotation_position="top right")
         fig.add_vline(x=med_price, line_dash="dot", line_color=ACCENT,
                       annotation_text=f"Median {fmt_price(med_price)}", annotation_position="top left")
-        st.plotly_chart(clean_fig(fig), use_container_width=True)
+        show_chart(clean_fig(fig))
 
     with col2:
         st.markdown('<div class="section-header">Price by overall quality</div>', unsafe_allow_html=True)
@@ -207,7 +221,7 @@ if page == "Overview":
         )
         fig2.update_traces(textposition="outside")
         fig2.update_layout(coloraxis_showscale=False)
-        st.plotly_chart(clean_fig(fig2), use_container_width=True)
+        show_chart(clean_fig(fig2))
 
     # Price by year + building type breakdown
     col3, col4 = st.columns([2, 1])
@@ -235,7 +249,7 @@ if page == "Overview":
             legend=dict(orientation="h", y=1.12),
             **PLOTLY_LAYOUT,
         )
-        st.plotly_chart(fig3, use_container_width=True)
+        show_chart(fig3)
 
     with col4:
         st.markdown('<div class="section-header">Listings by building type</div>', unsafe_allow_html=True)
@@ -250,7 +264,7 @@ if page == "Overview":
         )
         fig4.update_traces(textinfo="percent+label", textfont_size=11)
         fig4.update_layout(showlegend=False, **PLOTLY_LAYOUT)
-        st.plotly_chart(fig4, use_container_width=True)
+        show_chart(fig4)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -288,7 +302,7 @@ elif page == "Geographic":
         )
         fig.update_traces(textposition="outside", textfont_size=10)
         fig.update_layout(coloraxis_showscale=False, height=620, **PLOTLY_LAYOUT)
-        st.plotly_chart(fig, use_container_width=True)
+        show_chart(fig)
 
     with col2:
         st.markdown('<div class="section-header">Price range by neighborhood (top 15)</div>', unsafe_allow_html=True)
@@ -305,7 +319,7 @@ elif page == "Geographic":
             xaxis_tickangle=-45,
             **PLOTLY_LAYOUT,
         )
-        st.plotly_chart(fig2, use_container_width=True)
+        show_chart(fig2)
 
     st.divider()
 
@@ -346,7 +360,7 @@ elif page == "Geographic":
         )
         fig3.update_traces(textposition="top center", textfont_size=9)
         fig3.update_layout(coloraxis_showscale=False, height=420, **PLOTLY_LAYOUT)
-        st.plotly_chart(fig3, use_container_width=True)
+        show_chart(fig3)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -384,7 +398,7 @@ elif page == "Trends":
     fig.update_yaxes(title_text="Price ($)", secondary_y=True, gridcolor="#f0f4f8")
     fig.update_xaxes(tickvals=yr_agg["yr_sold"], showgrid=False)
     fig.update_layout(legend=dict(orientation="h", y=1.12), **PLOTLY_LAYOUT)
-    st.plotly_chart(fig, use_container_width=True)
+    show_chart(fig)
 
     st.divider()
 
@@ -412,7 +426,7 @@ elif page == "Trends":
         fig2.update_yaxes(title_text="Avg price ($)", secondary_y=True, gridcolor="#f0f4f8")
         fig2.update_xaxes(showgrid=False)
         fig2.update_layout(legend=dict(orientation="h", y=1.12), **PLOTLY_LAYOUT)
-        st.plotly_chart(fig2, use_container_width=True)
+        show_chart(fig2)
 
     with col2:
         st.markdown('<div class="section-header">Price per sq ft by year</div>', unsafe_allow_html=True)
@@ -424,7 +438,7 @@ elif page == "Trends":
         )
         fig3.update_traces(line_width=2.5, marker_size=8)
         fig3.update_xaxes(tickvals=yr_agg["yr_sold"])
-        st.plotly_chart(clean_fig(fig3), use_container_width=True)
+        show_chart(clean_fig(fig3))
 
     st.divider()
 
@@ -447,7 +461,7 @@ elif page == "Trends":
         )
         fig4.update_traces(textposition="outside")
         fig4.update_layout(coloraxis_showscale=False, **PLOTLY_LAYOUT)
-        st.plotly_chart(fig4, use_container_width=True)
+        show_chart(fig4)
 
     with col4:
         fig5 = px.bar(
@@ -458,7 +472,7 @@ elif page == "Trends":
         )
         fig5.update_traces(textposition="outside")
         fig5.update_layout(coloraxis_showscale=False, **PLOTLY_LAYOUT)
-        st.plotly_chart(fig5, use_container_width=True)
+        show_chart(fig5)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -520,7 +534,7 @@ elif page == "Risk & Volatility":
         )
         fig.update_traces(textposition="outside", textfont_size=9)
         fig.update_layout(coloraxis_showscale=False, height=600, **PLOTLY_LAYOUT)
-        st.plotly_chart(fig, use_container_width=True)
+        show_chart(fig)
 
     with col2:
         st.markdown('<div class="section-header">Price std dev vs. avg price</div>', unsafe_allow_html=True)
@@ -541,7 +555,7 @@ elif page == "Risk & Volatility":
         fig2.update_traces(textposition="top center", textfont_size=8)
         fig2.update_layout(height=600, **PLOTLY_LAYOUT)
         fig2.update_layout(coloraxis_colorbar=dict(title="CV", thickness=12))
-        st.plotly_chart(fig2, use_container_width=True)
+        show_chart(fig2)
 
     st.divider()
 
@@ -569,7 +583,7 @@ elif page == "Risk & Volatility":
         legend=dict(orientation="h", y=1.1),
         **PLOTLY_LAYOUT,
     )
-    st.plotly_chart(clean_fig(fig3), use_container_width=True)
+    show_chart(clean_fig(fig3))
 
     # Full risk table
     st.markdown('<div class="section-header">Full risk table</div>', unsafe_allow_html=True)
